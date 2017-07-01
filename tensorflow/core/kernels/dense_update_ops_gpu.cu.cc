@@ -1,4 +1,4 @@
-/* Copyright 2015 Google Inc. All Rights Reserved.
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,9 +27,13 @@ typedef Eigen::GpuDevice GPUDevice;
 
 #define DEFINE_GPU_KERNELS(T)                              \
   template struct functor::DenseUpdate<GPUDevice, T, ADD>; \
-  template struct functor::DenseUpdate<GPUDevice, T, SUB>; \
-  template struct functor::DenseUpdate<GPUDevice, T, ASSIGN>;
+  template struct functor::DenseUpdate<GPUDevice, T, SUB>;
 TF_CALL_GPU_NUMBER_TYPES(DEFINE_GPU_KERNELS);
+#undef DEFINE_GPU_KERNELS
+
+#define DEFINE_GPU_KERNELS(T) \
+  template struct functor::DenseUpdate<GPUDevice, T, ASSIGN>;
+TF_CALL_GPU_ALL_TYPES(DEFINE_GPU_KERNELS);
 #undef DEFINE_GPU_KERNELS
 
 }  // end namespace tensorflow

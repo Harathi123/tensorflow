@@ -1,4 +1,4 @@
-/* Copyright 2015 Google Inc. All Rights Reserved.
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ limitations under the License.
 
 #include <string>
 #include <vector>
-#include "tensorflow/core/framework/attr_value.pb.h"
+#include "tensorflow/core/framework/attr_value.pb.h"  // TODO(62899350): Remove
 #include "tensorflow/core/framework/partial_tensor_shape.h"
 #include "tensorflow/core/framework/tensor.h"
 #include "tensorflow/core/framework/tensor_shape.h"
@@ -28,6 +28,10 @@ limitations under the License.
 #include "tensorflow/core/lib/gtl/array_slice.h"
 
 namespace tensorflow {
+
+// Forward declare protos so their symbols can be removed from .so exports
+class AttrValue;
+class NameAttrList;
 
 // A human-readable rendering of attr_value, that is more concise than a
 // text-format proto.
@@ -56,13 +60,15 @@ void SetAttrValue(double value, AttrValue* out);
 void SetAttrValue(bool value, AttrValue* out);
 void SetAttrValue(DataType value, AttrValue* out);
 void SetAttrValue(const TensorShape& value, AttrValue* out);
+void SetAttrValue(const TensorShapeProto& value, AttrValue* out);
+void SetAttrValue(const PartialTensorShape& value, AttrValue* out);
 void SetAttrValue(const Tensor& value, AttrValue* out);
 void SetAttrValue(const TensorProto& value, AttrValue* out);
 void SetAttrValue(const NameAttrList& value, AttrValue* out);
-void SetAttrValue(const PartialTensorShape& value, AttrValue* out);
 
 void SetAttrValue(gtl::ArraySlice<string> value, AttrValue* out);
 void SetAttrValue(gtl::ArraySlice<const char*> value, AttrValue* out);
+void SetAttrValue(gtl::ArraySlice<StringPiece> value, AttrValue* out);
 void SetAttrValue(gtl::ArraySlice<int64> value, AttrValue* out);
 void SetAttrValue(gtl::ArraySlice<int32> value, AttrValue* out);
 void SetAttrValue(gtl::ArraySlice<float> value, AttrValue* out);
@@ -72,13 +78,13 @@ void SetAttrValue(const std::vector<bool>& value, AttrValue* out);
 void SetAttrValue(std::initializer_list<bool> value, AttrValue* out);
 void SetAttrValue(DataTypeSlice value, AttrValue* out);
 void SetAttrValue(gtl::ArraySlice<TensorShape> value, AttrValue* out);
+void SetAttrValue(gtl::ArraySlice<TensorShapeProto> value, AttrValue* out);
+void SetAttrValue(gtl::ArraySlice<PartialTensorShape> value, AttrValue* out);
 void SetAttrValue(gtl::ArraySlice<Tensor> value, AttrValue* out);
 void SetAttrValue(gtl::ArraySlice<TensorProto> value, AttrValue* out);
-void SetAttrValue(gtl::ArraySlice<PartialTensorShape> value, AttrValue* out);
+void SetAttrValue(gtl::ArraySlice<NameAttrList> value, AttrValue* out);
 
-inline void SetAttrValue(const AttrValue& value, AttrValue* out) {
-  *out = value;
-}
+void SetAttrValue(const AttrValue& value, AttrValue* out);
 
 // Returns true if a and b have the same value.
 // NOTE: May return false negatives for tensor values.
